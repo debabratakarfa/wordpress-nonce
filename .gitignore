@@ -5,6 +5,3 @@
 ### Composer ###
 /vendor
 composer.lock
-
-### PHPUnit ###
-/bin
