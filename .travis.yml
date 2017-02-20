@@ -31,7 +31,6 @@ before_script:
   - |
     composer global require wp-coding-standards/wpcs
     phpcs --config-set installed_paths $HOME/.composer/vendor/wp-coding-standards/wpcs
-    composer require debabratakarfa/wordpress-nonce
 
 script:
   - phpcs --standard=phpcs.ruleset.xml $(find . -name '*.php')
