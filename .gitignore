@@ -1,5 +1,6 @@
 ### WordPress ###
 *.log
+.DS_Store
 
 ### Composer ###
 /vendor
