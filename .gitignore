@@ -1,0 +1,9 @@
+### WordPress ###
+*.log
+
+### Composer ###
+/vendor
+composer.lock
+
+### PHPUnit ###
+/bin

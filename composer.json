@@ -1,0 +1,24 @@
+{
+	"name": "debabratakarfa/wordpress-nonce",
+	"description": "This will enable WordPress Nonce function to use on project",
+	"type": "wordpress-plugin",
+	"license": "GPL",
+	"authors": [
+		{
+			"name": "Debabrata Karfa",
+			"email": "im@deb.im"
+		}
+	],
+	"minimum-stability": "dev",
+	"require": {
+		"php": ">=7.0.0"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "6.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"DebabrataKarfa\\Nonce\\": "classes"
+		}
+	}
+}
