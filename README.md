@@ -63,3 +63,12 @@ Create nonce url
 $nonce = new Nonce();
 $url = $nonce->nonce_url('http://my-url.com', 'doing-something', 'my-nonce');
 ```
+
+##How to do Test
+
+```
+Open Terminal
+
+cd /path/to/your/install/wordpress/plugin_folder/wordpress-nonce/
+phpunit
+```
