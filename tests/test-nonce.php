@@ -15,8 +15,8 @@ class Test_Nonce extends WP_UnitTestCase {
 	public function testVerifyNonce() {
 		$nonce = new Nonce();
 
-		$set_nonce = $nonce->create_nonce('test-nonce');
-		$this->assertEquals($nonce->verify_nonce($set_nonce, 'test-nonce'), 1);
+		$set_nonce = $nonce->create_nonce( 'test-nonce' );
+		$this->assertEquals( $nonce->verify_nonce( $set_nonce, 'test-nonce' ), 1 );
 
 		$not_valid = $nonce->verify_nonce( $set_nonce . '-failure' );
 		$this->assertFalse( $not_valid );
@@ -25,17 +25,17 @@ class Test_Nonce extends WP_UnitTestCase {
 	public function testNonceField() {
 		$nonce = new Nonce();
 
-		$nonce_field = $nonce->nonce_field('test-nonce', '_wptestnonce', true, false);
+		$nonce_field = $nonce->nonce_field( 'test-nonce', '_wptestnonce', true, false );
 
 		$dom = new DOMDocument();
-		$dom->loadHTML($nonce_field);
+		$dom->loadHTML( $nonce_field );
 
-		$input = $dom->getElementsByTagName('input')->item(0);
-		if (!empty($input)) {
-			$get_nonce = $input->getAttribute('value');
-			$this->assertNotEquals($nonce->verify_nonce($get_nonce, 'test-nonce'), 1);
-		}else{
-			$this->assertTrue(false);
+		$input = $dom->getElementsByTagName( 'input' )->item( 0 );
+		if ( ! empty( $input ) ) {
+			$get_nonce = $input->getAttribute( 'value' );
+			$this->assertNotEquals( $nonce->verify_nonce( $get_nonce, 'test-nonce' ), 1 );
+		} else {
+			$this->assertTrue( false );
 		}
 	}
 
@@ -49,6 +49,11 @@ class Test_Nonce extends WP_UnitTestCase {
 		$url_with_nonce = $nonce->create_url( $url );
 		self::assertSame( $url_with_nonce, $nonce->get_url() );
 		self::assertSame( $nonce->set_url( 'abc' ), 'abc' );
+	}
+
+	public function testNonceAys( $value = '' ) {
+		# code...
+		return 'Welcome';
 	}
 
 
