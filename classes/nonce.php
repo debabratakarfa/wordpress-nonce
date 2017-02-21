@@ -43,10 +43,10 @@ if ( ! class_exists( 'Nonce' ) ) {
 		}
 
 		/**
- 		 * Get the Nonce
- 		 *
- 		 * @return string $nonce The Nonce
- 		 */
+		 * Get the Nonce
+		 *
+		 * @return string $nonce The Nonce
+		 */
 		public function get_nonce() {
 			return $this->nonce;
 		}
