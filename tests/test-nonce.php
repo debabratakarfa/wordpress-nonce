@@ -51,10 +51,4 @@ class Test_Nonce extends WP_UnitTestCase {
 		self::assertSame( $nonce->set_url( 'abc' ), 'abc' );
 	}
 
-	public function testNonceAys( $value = '' ) {
-		# code...
-		return 'Welcome';
-	}
-
-
 }
