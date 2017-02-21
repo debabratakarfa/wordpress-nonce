@@ -23,7 +23,19 @@ The composer.json file:
 
 Add to your composer.json file this package as a require an then run 'composer install'
 
+Or
 
+```
+Open Terminal
+
+cd /path/to/your/install/wordpress/plugin_folder/
+git clone https://github.com/debabratakarfa/wordpress-nonce.git
+cd wordpress-nonce
+composer install
+
+Then go to Wp-Admin access to activate it
+
+```
 ##How to use
 
 Create nonce
