@@ -67,8 +67,9 @@ $url = $nonce->nonce_url('http://my-url.com', 'doing-something', 'my-nonce');
 ##How to do Test
 
 ```
-Open Terminal
+Open Terminal [Consider you using VVV and PHPUnit Test properly setup]
 
+vagrant ssh
 cd /path/to/your/install/wordpress/plugin_folder/wordpress-nonce/
 phpunit
 ```
