@@ -211,8 +211,7 @@ if ( ! class_exists( 'Nonce' ) ) {
 		 */
 		public function nonce_ays( $nonce ) {
 
-			$this->set_action( wp_nonce_ays( $this->get_action() ) );
-			return $this->get_nonce();
+			return wp_nonce_ays( $this->get_action() );
 
 		}
 
@@ -300,6 +299,19 @@ if ( ! class_exists( 'Nonce' ) ) {
 			}
 
 			return false;
+		}
+
+		/**
+		 * The referer field value will be the value of the 'REQUEST_URI' element of the $_SERVER PHP superglobal variable
+		 * @return string Referer field.
+		 */
+		public function nonce_referer_field() {
+
+			$this->create_nonce();
+			$field = wp_referer_field( $this->get_request_name() );
+			$this->set_field( $field );
+			return $this->get_field( $field );
+
 		}
 	}
 
