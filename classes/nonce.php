@@ -15,22 +15,43 @@ if ( ! class_exists( 'Nonce' ) ) {
 		 * The name of the action
 		 *
 		 * @var string
-		 **/
+		 */
 		private $action = '';
 
 		/**
 		 * The name of the request
 		 *
 		 * @var string
-		 **/
+		 */
 		private $request_name = '';
 
 		/**
 		 * The Nonce
 		 *
 		 * @var string
-		 **/
+		 */
 		private $nonce = '';
+
+		/**
+		 * The field
+		 *
+		 * @var string
+		 **/
+		private $field = '';
+
+		/**
+		 * The url
+		 *
+		 * @var string
+		 */
+		private $url = '';
+
+		/**
+		 * The query_arg
+		 *
+		 * @var string
+		 */
+		private $query_arg = '';
 
 		/**
 		 * Set the Nonce
@@ -65,7 +86,7 @@ if ( ! class_exists( 'Nonce' ) ) {
 		 * Get the Action
 		 *
 		 * @return string The action.
-		 **/
+		 */
 		public function get_action() {
 			return $this->action;
 		}
@@ -94,7 +115,7 @@ if ( ! class_exists( 'Nonce' ) ) {
 		 *
 		 * @param string $new_url The new URL.
 		 * @return string $nonce  The URL
-		 **/
+		 */
 		public function set_url( string $new_url ) {
 			$this->url = $new_url;
 			return $this->get_url();
@@ -104,9 +125,47 @@ if ( ! class_exists( 'Nonce' ) ) {
 		 * Get the URL
 		 *
 		 * @return string $url The URL
-		 **/
+		 */
 		public function get_url() {
 			return $this->url;
+		}
+
+		/**
+		 * Set the Query argument
+		 *
+		 * @param string $query_arg The new Query argument
+		 */
+		public function set_query_arg( string $query_arg ) {
+			$this->query_arg = $query_arg;
+			return $this->query_arg;
+		}
+
+		/**
+		 * Get the Query argument
+		 *
+		 * @return string $query_arg The Query argument
+		 */
+		public function get_query_arg() {
+			return $this->query_arg;
+		}
+
+		/**
+		 * Set the Field
+		 *
+		 * @param string $new_field The new Field
+		 */
+		public function set_field( string $new_field ) {
+			$this->field = $new_field;
+			return $this->get_field();
+		}
+
+		/**
+		 * Get the Field
+		 *
+		 * @return string $field The field
+		 */
+		public function get_field() {
+			return $this->field;
 		}
 
 		/**
@@ -116,8 +175,10 @@ if ( ! class_exists( 'Nonce' ) ) {
 		 * @return string The one use form token.
 		 */
 		public function create_nonce( $nonce = -1 ) {
+
 			$this->set_nonce( wp_create_nonce( $this->get_action() ) );
 			return $this->get_nonce();
+
 		}
 
 		/**
@@ -127,6 +188,7 @@ if ( ! class_exists( 'Nonce' ) ) {
 		 * @return boolean $valid Whether the nonce is valid or not.
 		 */
 		public function verify_nonce( string $nonce = null ) {
+
 			if ( null !== $nonce ) {
 				$this->set_nonce( $nonce );
 			}
@@ -138,6 +200,7 @@ if ( ! class_exists( 'Nonce' ) ) {
 			}
 
 			return true;
+
 		}
 
 		/**
@@ -147,8 +210,10 @@ if ( ! class_exists( 'Nonce' ) ) {
 		 * @return void This function does not return a value.
 		 */
 		public function nonce_ays( $nonce ) {
+
 			$this->set_action( wp_nonce_ays( $this->get_action() ) );
 			return $this->get_nonce();
+
 		}
 
 
@@ -158,10 +223,34 @@ if ( ! class_exists( 'Nonce' ) ) {
 		 * @param  string $name (optional) Nonce name. This is the name of the nonce hidden form field to be created.
 		 * @param  boolean $referer (optional) Whether also the referer hidden form field should be created.
 		 * @param  boolean $echo (optional) Whether to display or return the nonce hidden form field.
-		 * @return (string) The nonce hidden form field, optionally followed by the referer hidden form field if the $referer argument is set to true.
+		 * @return string The nonce hidden form field, optionally followed by the referer hidden form field if the $referer argument is set to true.
 		 */
-		public function nonce_field( $action = -1, $name = '_wpnonce', $referer = true, $echo = true ) {
-			return wp_nonce_field( $action, $name, $referer, $echo );
+		public function nonce_field( bool $referer = null, bool $echo = null ) {
+
+			$referer = (bool) $referer;
+			$echo = (bool) $echo;
+
+			// Let's create a nonce to populate $nonce.
+			$this->create_nonce();
+			$field = wp_nonce_field( $this->get_action(), $this->get_request_name(), $referer, false );
+			$this->set_field( $field );
+
+			if ( true === $echo ) {
+				echo wp_kses(
+					$this->get_field(),
+					array(
+						'input' => array(
+							'type'  => array(),
+							'id'    => array(),
+							'name'  => array(),
+							'value' => array(),
+						),
+					)
+				);
+			}
+
+			return $this->get_field();
+
 		}
 
 		/**
@@ -180,6 +269,38 @@ if ( ! class_exists( 'Nonce' ) ) {
 
 		}
 
+		/**
+		 * Tests either if the current request carries a valid nonce, or if the current request was referred from an administration screen; depending on whether the $action argument is given (which is prefered), or not, respectively.
+		 * @param  string $action    (optional) Action name. Should give the context to what is taking place.
+		 * @param  string  $query_arg (optional) Where to look for nonce in the $_REQUEST PHP variable.
+		 * @return string             To return boolean true, in the case of the obsolete usage
+		 */
+		public function nonce_check_admin_referer() {
+
+			$valid = check_admin_referer( $this->get_action(), $this->get_query_arg() );
+
+			if ( true === $valid ) {
+				return true;
+			}
+
+			return false;
+		}
+
+		/**
+		 * Nonce verifies the AJAX request, to prevent any processing of requests which are passed in by third-party sites or systems
+		 * @return boolean This function will return a boolean of true if the check passes or false if the check fails.
+		 */
+		public function nonce_check_ajax_referer() {
+
+			$die = false;
+			$valid = check_ajax_referer( $this->get_action(), $this->get_query_arg(), $die );
+
+			if ( true === $valid ) {
+				return true;
+			}
+
+			return false;
+		}
 	}
 
 }

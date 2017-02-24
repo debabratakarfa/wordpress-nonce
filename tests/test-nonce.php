@@ -33,7 +33,7 @@ class Test_Nonce extends WP_UnitTestCase {
 		$input = $dom->getElementsByTagName( 'input' )->item( 0 );
 		if ( ! empty( $input ) ) {
 			$get_nonce = $input->getAttribute( 'value' );
-			$this->assertNotEquals( $nonce->verify_nonce( $get_nonce, 'test-nonce' ), 1 );
+			$this->assertEquals( $nonce->verify_nonce( $get_nonce, 'test-nonce' ), 1 );
 		} else {
 			$this->assertTrue( false );
 		}
